@@ -6,12 +6,17 @@ from discord.ext import commands
 default_intents = discord.Intents.default()
 default_intents.members= True
 client = discord.Client(intents=default_intents)
+
+
+
 client = commands.Bot(command_prefix="!")
 
 @client.command()
 async def test(ctx):
     await ctx.send("test")
 
+
+# fonctionne pas :
 @client.event
 async def on_member_join(member):
     welcome_channel = client.get_channel(978561467001487370)
@@ -27,6 +32,8 @@ async def on_message(message):
     if message.author == client.user:
         return
     # on vérifie que le msg ne vient pas de soi-même, cad le bot
+
+
 
     Help_channel = client.get_channel(978559580592283669)
 
@@ -46,7 +53,27 @@ async def on_message(message):
 # met le bot en ligne :
 client.run("OTc4NTU5Njg0MjQxOTQ0NTk2.GgybG2.lr-nnSvwkVttprTn7XcZnvtpR1Y5gwYW325K40")
 
+
+
+
+
 # -------------------------------- nolan --------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
