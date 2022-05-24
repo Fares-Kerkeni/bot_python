@@ -44,7 +44,7 @@ async def on_message(message):
     Help_channel = client.get_channel(978559580592283669)
 
     # envoyer dans le channel "bonjour" si le msg !hello est envoyé dans le bon channel
-    if message.channel == Help_channel and message.content.startswith('!help'):
+    if message.channel == Help_channel and message.content.startswith('!aide'):
         await Help_channel.send('...')
 
     
