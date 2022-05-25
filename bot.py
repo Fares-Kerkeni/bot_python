@@ -7,6 +7,9 @@ from discord.ext import commands
 default_intents = discord.Intents.default()
 default_intents.members= True
 client = discord.Client(intents=default_intents)
+
+
+
 client = commands.Bot(command_prefix="!")
 
 @client.event
@@ -46,6 +49,31 @@ async def on_message(message):
     #avec cette ligne, si on écrit !test on recoit test du @client.command()
 
 # met le bot en ligne :
+client.run("OTc4NTU5Njg0MjQxOTQ0NTk2.GgybG2.lr-nnSvwkVttprTn7XcZnvtpR1Y5gwYW325K40")
+
+
+
+
+
+# -------------------------------- nolan --------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # -------------------------------- nolan --------------------------------
 
