@@ -690,4 +690,33 @@ def number_to_emoji(nombre_a_convertir):
 
 # ---------------------------------------------- PLUS OU MOINS ---------------------------------------------- #
 
+# ----------------------------------------------- TU PREFERES ----------------------------------------------- #
+
+utilisateurs = []
+
+# fonction pour connaitre la reponse
+@client.command()
+async def tu_preferes(ctx):
+    # verifie si l'utilisateur est bien dans le tu preferes
+    if ctx.channel.id == 980145249005494293:
+        already_add = False
+        for i in range (len(utilisateurs)) : 
+            if utilisateurs[i] == ctx.author.id :
+                already_add = True
+            else :
+                already_add = False
+        if already_add == False:
+            utilisateurs.append(ctx.author.id)
+            await ctx.send("add")
+            await ctx.send(utilisateurs)
+        else :
+            await ctx.send("already add")
+            await ctx.send(utilisateurs)
+        
+    # si l'utilisateur est dans le mauvais canal ca le previent
+    else : 
+        await ctx.send("Cette commande marche que dans le channel tu préfères")
+
+# ----------------------------------------------- TU PREFERES ----------------------------------------------- #
+
 client.run('OTc4MjI5MTUwNDI0OTIwMDc0.GTFsq3.uomKxew7wl-gobOTyd5Y4f1qAS03etcrLaEQyM ')
