@@ -19,7 +19,7 @@ async def aide(ctx):
     elif ctx.channel.id == 980407531623030954:
          await ctx.send("help plus ou moins")
     else :
-        await ctx.send("vous pouvez utiliser cette commande que dans le channel joke, pendu et tictactoe")
+        await ctx.send("vous pouvez utiliser cette commande que dans le channel joke, pendu, tictactoe, tu-preferes et plus-ou-moins")
 
 @client.command()
 async def clear(ctx, amount=5):
@@ -567,17 +567,127 @@ def letter_to_emoji(mot_a_convertir):
 
 # ---------------------------------------------- PLUS OU MOINS ---------------------------------------------- #
 
+max = 0
+min = 0
+more_less_aleatoire = 0
+
+numbre_versus_emoji = [
+    ["0",":zero:"],
+    ["1",":one:"],
+    ["2",":two:"],
+    ["3",":three:"],
+    ["4",":four:"],
+    ["5",":five:"],
+    ["6",":six:"],
+    ["7",":seven:"],
+    ["8",":eight:"],
+    ["9",":nine:"]
+]
+
 # fonction pour lancer le jeu plus ou moins
 @client.command()
-async def more_less(ctx):
+async def more_less(ctx, nombre_1 = 0, nombre_2 = 0):
+    global max
+    global min
+    global more_less_aleatoire 
     # verifie si l'utilisateur est bien dans le canal plus ou moins
     if ctx.channel.id == 980407531623030954:
-        await ctx.send("slt")
+        # si il y a déjà une partie en cours
+        if more_less_aleatoire != 0 :
+            await ctx.send("Il y a déjà une partie en cours, finissez la partie ou entrez =give_more_less pour connaitre la réponse et pouvoir commencer une nouvelle partie")
+        else :
+            # si les nombres sont pas entre 1 et 999 999
+            if nombre_1 > 999999 or nombre_1 < 1 or nombre_2 > 999999 or nombre_2 < 1:
+                await ctx.send("Il faut choisir deux nombres entre 1 et 999 999, par exemple =more_less 1 999 donnera un nombre entre 1 et 999")
+            # si les deux nombres sont pareils
+            elif nombre_1 == nombre_2 :
+                await ctx.send("Il faut choisir deux nombres différents")
+            else :
+                # determine qui sera le minimum et qui sera le maximum
+                if nombre_2 > nombre_1 :
+                    max = nombre_2
+                    min = nombre_1
+                else :
+                    min = nombre_2
+                    max = nombre_1
+                more_less_aleatoire = randint(min,max)
+                await ctx.send("Bonne chance, entre =try_more_less et le nombre que tu veux pour trouver la réponse")
     # si l'utilisateur est dans le mauvais canal ca le previent
     else : 
-        await ctx.send("cette commande marche que dans le channel plus ou moins")
+        await ctx.send("Cette commande marche que dans le channel plus ou moins")
+
+# fonction pour essayer de trouver le nombre 
+@client.command()
+async def try_more_less(ctx, reponse = 0):
+    global max
+    global min
+    global more_less_aleatoire 
+    # verifie si l'utilisateur est bien dans le canal plus ou moins
+    if ctx.channel.id == 980407531623030954:
+        # si il n y a pas de partie en cours
+        if more_less_aleatoire == 0 :
+            await ctx.send("Il faut lancer une partie avec =more_less avant de pouvoir utiliser cette commande")
+        else :
+            # si il entre un nombre plus haut ou plus bas que le max et le min
+            if reponse < min or reponse > max :
+                await ctx.send("Il faut que votre réponse soit entre les 2 nombres que vous avez entrer au début de la partie")
+            else :
+                # si la reponse est plus haute que le nombre a trouver
+                if reponse > more_less_aleatoire :
+                    await ctx.send(":regional_indicator_m: :regional_indicator_o: :regional_indicator_i: :regional_indicator_n: :regional_indicator_s:")
+                # si la reponse est plus basse que le nombre a trouver
+                elif reponse < more_less_aleatoire :
+                    await ctx.send(":regional_indicator_p: :regional_indicator_l: :regional_indicator_u: :regional_indicator_s:")
+                # si la reponse est la meme que le nombre a trouver
+                else :
+                    await ctx.send(":regional_indicator_b: :regional_indicator_r: :regional_indicator_a: :regional_indicator_v: :regional_indicator_o:")
+                    await ctx.send("Le nombre à trouver était bien")
+                    more_less_aleatoire_to_emoji = number_to_emoji(more_less_aleatoire)
+                    await ctx.send(more_less_aleatoire_to_emoji)
+                    more_less_aleatoire = 0
+    # si l'utilisateur est dans le mauvais canal ca le previent
+    else : 
+        await ctx.send("Cette commande marche que dans le channel plus ou moins")
+
+# fonction pour connaitre la reponse
+@client.command()
+async def give_more_less(ctx):
+    global max
+    global min
+    global more_less_aleatoire 
+    # verifie si l'utilisateur est bien dans le canal plus ou moins
+    if ctx.channel.id == 980407531623030954:
+        # si il n y a pas de partie en cours
+        if more_less_aleatoire == 0 :
+            await ctx.send("Il faut lancer une partie avec =more_less avant de pouvoir utiliser cette commande")
+        # donne la reponse et fini la partie
+        else :
+            await ctx.send("La réponse était")
+            more_less_aleatoire_to_emoji = number_to_emoji(more_less_aleatoire)
+            await ctx.send(more_less_aleatoire_to_emoji)
+            more_less_aleatoire = 0
+    # si l'utilisateur est dans le mauvais canal ca le previent
+    else : 
+        await ctx.send("Cette commande marche que dans le channel plus ou moins")
+
+# convertir un nombre en emoji
+def number_to_emoji(nombre_a_convertir):
+    global numbre_versus_emoji
+    # transforme le nombre en str ("40")
+    str_nombre_a_convertir = str(nombre_a_convertir)
+    # transforme le nombre en liste (["4","0"])
+    nombre_a_convertir_list = list(str_nombre_a_convertir)
+    # parcours le tableau avec le nombre
+    for i in range(len(nombre_a_convertir_list)):
+        # parcours le tableau avec la correspondance chiffre emoji
+        for j in range(len(numbre_versus_emoji)):
+            # si le nombre correspond a un emoji ca remplace le nombre par un emoji
+            if nombre_a_convertir_list[i] == numbre_versus_emoji[j][0]:
+                nombre_a_convertir_list[i] = numbre_versus_emoji[j][1]
+    # renvoie le nombre transformé en emoji
+    nombre_convertis = ' '.join(nombre_a_convertir_list)
+    return nombre_convertis
 
 # ---------------------------------------------- PLUS OU MOINS ---------------------------------------------- #
 
 client.run('OTc4MjI5MTUwNDI0OTIwMDc0.GTFsq3.uomKxew7wl-gobOTyd5Y4f1qAS03etcrLaEQyM ')
-
