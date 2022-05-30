@@ -3,8 +3,12 @@ import discord
 from discord.ext import commands
 from random import randint
 import random
+from discord_components import DiscordComponents, ComponentsBot, Button, SelectOption, Select
+
 
 client = commands.Bot(command_prefix="=")
+DiscordComponents(client)
+
 
 @client.command()
 async def aide(ctx):
@@ -716,6 +720,22 @@ async def tu_preferes(ctx):
     # si l'utilisateur est dans le mauvais canal ca le previent
     else : 
         await ctx.send("Cette commande marche que dans le channel tu préfères")
+
+@client.command()
+async def hello(ctx):
+    tu_preferes = "Tu preferes :"
+    tu_preferes1 = "Manger une limasse"
+    tu_preferes2 = "Manger un crapaud"
+    await ctx.send(tu_preferes, components = [
+        [
+            Button(label = tu_preferes1, style="2", custom_id="reponse1"), 
+            Button(label = tu_preferes2, style="2", custom_id="reponse2")]
+        ])
+    reponse1 = await client.wait_for("button_click", check = lambda i: i.custom_id == "reponse1")
+    await reponse1.send(f"{reponse1.user} a choisis la réponse 1", ephemeral=False)
+    reponse2 = await client.wait_for("button_click", check = lambda i: i.custom_id == "reponse2")
+    await reponse1.send(f"{reponse2.user} a choisis la réponse 1", ephemeral=False)
+
 
 # ----------------------------------------------- TU PREFERES ----------------------------------------------- #
 
