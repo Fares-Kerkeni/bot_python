@@ -28,7 +28,7 @@ async def aide(ctx):
 @client.command()
 async def clear(ctx, amount=5):
 	await ctx.channel.purge(limit=amount)
-        
+
 # ----------------------------------------------- TIC TAC TOE ----------------------------------------------- #
 
 player1 = ""
@@ -98,7 +98,7 @@ async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
         # Demande aux utilisateurs de finir leur partie avant d'en commencer une autre
         else:
             await ctx.send("il y a deja une partie en cours")
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel tictactoe")
 
 # fonction pour placer les markeur
@@ -163,9 +163,9 @@ async def place(ctx, pos: int):
         # demande de lancer une nouvelle partie a l'utilisateur
         else:
             await ctx.send("Lance une nouvelle partie avec =tictactoe")
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel tictactoe")
-        
+
 # fonction pour verifier qui est le gagnant
 def checkWinner(winningConditions, mark):
     global gameOver
@@ -182,7 +182,7 @@ async def tictactoe_error(ctx, error):
     # verifie si la personne a bien mentionner 2 utilisateurs
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("Mentionne 2 personnes")
-    # envoie un message d'erreur si la personne a mal mentionner 
+    # envoie un message d'erreur si la personne a mal mentionner
     elif isinstance(error, commands.BadArgument):
         await ctx.send("La mention n'est pas bonne")
 
@@ -192,7 +192,7 @@ async def place_error(ctx, error):
     # si la personne a oublié de préciser la position de la case ou il veut jouer
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("Precise la case ou tu veux placer ton markeur")
-    # si l'utilisateur n'entre pas un chiffre 
+    # si l'utilisateur n'entre pas un chiffre
     elif isinstance(error, commands.BadArgument):
         await ctx.send("Entre un chiffre")
 
@@ -219,17 +219,17 @@ async def joke(ctx):
         global reponse
         global question
         global blague_aleatoire
-        
-        # si il y a deja une blague en cours ca previent l'utilisateur  
+
+        # si il y a deja une blague en cours ca previent l'utilisateur
         if question != "" :
-            await ctx.send("Il y a déjà une blague en cours, trouvez la réponse ou entre !give_reponse pour obtenir la réponse")
+            await ctx.send("Il y a déjà une blague en cours, trouvez la réponse ou entre =give_blague pour obtenir la réponse")
         # envoie une blague a l'utilisateur
         else :
             blague_aleatoire = randint(0,len(blagues) - 1)
             question = blagues[blague_aleatoire][0]
             reponse = blagues[blague_aleatoire][1]
             await ctx.send(question)
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel joke")
 
 # fonction pour demander la reponse
@@ -242,7 +242,7 @@ async def give_blague(ctx):
         global question
         global blague_aleatoire
 
-        # si il n y a pas de blague en cours ca previent l'utilisateur  
+        # si il n y a pas de blague en cours ca previent l'utilisateur
         if question == "":
             await ctx.send("vous devez d'abord utiliser la commande !joke pour avoir une blague")
         # envoie la reponse
@@ -250,7 +250,7 @@ async def give_blague(ctx):
             await ctx.send(reponse)
             reponse = ""
             question = ""
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel joke")
 
 # fonction pour essayer de trouver la blague
@@ -273,7 +273,7 @@ async def answer(ctx, *args):
             if i < len(args) :
                 sentence = sentence + " "
 
-        # si il n y a pas de blague en cours ca previent l'utilisateur  
+        # si il n y a pas de blague en cours ca previent l'utilisateur
         if question == "":
             await ctx.send("vous devez d'abord utiliser la commande !joke pour avoir une blague")
         # compare la reponse de l'utilisateur a la reponse de la blague
@@ -282,8 +282,8 @@ async def answer(ctx, *args):
             reponse = ""
             question = ""
         else :
-            await ctx.send("Essaye encore ou entre !give_reponse")
-    else : 
+            await ctx.send("Essaye encore ou entre !give_blague")
+    else :
         await ctx.send("cette commande marche que dans le channel joke")
 
 @client.command()
@@ -294,7 +294,7 @@ async def indice(ctx, num_indice : int):
         global reponse
         global question
         global blague_aleatoire
-        # si il n y a pas de blague en cours ca previent l'utilisateur  
+        # si il n y a pas de blague en cours ca previent l'utilisateur
         if question == "":
             await ctx.send("vous devez d'abord utiliser la commande !joke pour avoir une blague")
         # si il entre indice 1
@@ -304,9 +304,9 @@ async def indice(ctx, num_indice : int):
         elif num_indice == 2 :
             await ctx.send(blagues[blague_aleatoire][3])
         # sinon ca dit a l'utilisateur ce qu'il doit entrer
-        else : 
+        else :
             await ctx.send("Entrez !indice 1 ou !indice 2 selon l'indice que vous voulez")
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel joke")
 
 # ------------------------------------------------- BLAGUES ------------------------------------------------- #
@@ -360,7 +360,7 @@ essai_versus_image = [
     [10,'essai_10.PNG'],
     [11,'essai_11.PNG'],
     [12,'essai_12.PNG']
-]    
+]
 
 mot_a_trouver = ""
 mot_en_recherche = ""
@@ -409,7 +409,7 @@ async def pendu(ctx, difficulte = ""):
         else :
             await ctx.send("Il y a deja un pendu en cours, finissez le ou entrez =give_pendu pour avoir la reponse et pouvoir lancer une nouvelle partie")
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel pendu")
 
 # fonction pour tenter une lettre
@@ -445,7 +445,7 @@ async def try_letter(ctx, letter = ""):
                     if list_mot_a_trouver[i] == letter :
                         list_mot_en_recherche[i] = letter
                         lettre_trouvees = lettre_trouvees + 1
-                # convertis la liste du mot en recherche en chaine de caractere 
+                # convertis la liste du mot en recherche en chaine de caractere
                 str_mot_en_recherche = ''.join(list_mot_en_recherche)
                 mot_en_recherche = str_mot_en_recherche
                 # si le joueur a trouvé toutes les lettres il a gagné
@@ -477,7 +477,7 @@ async def try_letter(ctx, letter = ""):
                     mot_letter_to_emoji = letter_to_emoji(mot_en_recherche)
                     await ctx.send(mot_letter_to_emoji)
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel pendu")
 
 # fonction pour tenter un mot
@@ -523,7 +523,7 @@ async def try_word(ctx, word = ""):
                 mot_letter_to_emoji = letter_to_emoji(mot_en_recherche)
                 await ctx.send(mot_letter_to_emoji)
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel pendu")
 
 # fonction pour connaitre la reponse
@@ -548,7 +548,7 @@ async def give_pendu(ctx):
             # remet la varialbe vide pour pouvoir lancer une nouvelle partie
             mot_a_trouver = ""
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("cette commande marche que dans le channel pendu")
 
 # fonction pour transformer un mot en mot avec des lettres emoji
@@ -593,7 +593,7 @@ numbre_versus_emoji = [
 async def more_less(ctx, nombre_1 = 0, nombre_2 = 0):
     global max
     global min
-    global more_less_aleatoire 
+    global more_less_aleatoire
     # verifie si l'utilisateur est bien dans le canal plus ou moins
     if ctx.channel.id == 980407531623030954:
         # si il y a déjà une partie en cours
@@ -617,15 +617,15 @@ async def more_less(ctx, nombre_1 = 0, nombre_2 = 0):
                 more_less_aleatoire = randint(min,max)
                 await ctx.send("Bonne chance, entre =try_more_less et le nombre que tu veux pour trouver la réponse")
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("Cette commande marche que dans le channel plus ou moins")
 
-# fonction pour essayer de trouver le nombre 
+# fonction pour essayer de trouver le nombre
 @client.command()
 async def try_more_less(ctx, reponse = 0):
     global max
     global min
-    global more_less_aleatoire 
+    global more_less_aleatoire
     # verifie si l'utilisateur est bien dans le canal plus ou moins
     if ctx.channel.id == 980407531623030954:
         # si il n y a pas de partie en cours
@@ -650,7 +650,7 @@ async def try_more_less(ctx, reponse = 0):
                     await ctx.send(more_less_aleatoire_to_emoji)
                     more_less_aleatoire = 0
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("Cette commande marche que dans le channel plus ou moins")
 
 # fonction pour connaitre la reponse
@@ -658,7 +658,7 @@ async def try_more_less(ctx, reponse = 0):
 async def give_more_less(ctx):
     global max
     global min
-    global more_less_aleatoire 
+    global more_less_aleatoire
     # verifie si l'utilisateur est bien dans le canal plus ou moins
     if ctx.channel.id == 980407531623030954:
         # si il n y a pas de partie en cours
@@ -671,7 +671,7 @@ async def give_more_less(ctx):
             await ctx.send(more_less_aleatoire_to_emoji)
             more_less_aleatoire = 0
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("Cette commande marche que dans le channel plus ou moins")
 
 # convertir un nombre en emoji
@@ -696,47 +696,38 @@ def number_to_emoji(nombre_a_convertir):
 
 # ----------------------------------------------- TU PREFERES ----------------------------------------------- #
 
-utilisateurs = []
+all_tu_preferes = [
+    ["Manger une limasse","Manger un escargot",[382634426305085440]],
+    ["Manger des crottes de nez","Manger des cires d'oreille",[]],
+    ["Perdres tes mains","Perdres tes pieds",[382634426305085440]],
+    ["Mourir bruler","Mourir noyer",[]]
+]
+
+tu_preferes_aleatoire = ""
 
 # fonction pour connaitre la reponse
 @client.command()
 async def tu_preferes(ctx):
+    global tu_preferes_aleatoire
+    global all_tu_preferes
+
+    user = ctx.author.id
+    liste_a_faire = []
+    liste_deja_fait = []
     # verifie si l'utilisateur est bien dans le tu preferes
     if ctx.channel.id == 980145249005494293:
-        already_add = False
-        for i in range (len(utilisateurs)) : 
-            if utilisateurs[i] == ctx.author.id :
-                already_add = True
-            else :
-                already_add = False
-        if already_add == False:
-            utilisateurs.append(ctx.author.id)
-            await ctx.send("add")
-            await ctx.send(utilisateurs)
+        if tu_preferes_aleatoire != "" :
+            await ctx.send("Il y a déjà une partie en cours")
         else :
-            await ctx.send("already add")
-            await ctx.send(utilisateurs)
-        
+            for i in range(len(all_tu_preferes)) :
+                for j in range (len(all_tu_preferes[i][2])) :
+                    if all_tu_preferes[i][2][j] == user :
+                        liste_deja_fait.append(i)
+
     # si l'utilisateur est dans le mauvais canal ca le previent
-    else : 
+    else :
         await ctx.send("Cette commande marche que dans le channel tu préfères")
-
-@client.command()
-async def hello(ctx):
-    tu_preferes = "Tu preferes :"
-    tu_preferes1 = "Manger une limasse"
-    tu_preferes2 = "Manger un crapaud"
-    await ctx.send(tu_preferes, components = [
-        [
-            Button(label = tu_preferes1, style="2", custom_id="reponse1"), 
-            Button(label = tu_preferes2, style="2", custom_id="reponse2")]
-        ])
-    reponse1 = await client.wait_for("button_click", check = lambda i: i.custom_id == "reponse1")
-    await reponse1.send(f"{reponse1.user} a choisis la réponse 1", ephemeral=False)
-    reponse2 = await client.wait_for("button_click", check = lambda i: i.custom_id == "reponse2")
-    await reponse1.send(f"{reponse2.user} a choisis la réponse 1", ephemeral=False)
-
 
 # ----------------------------------------------- TU PREFERES ----------------------------------------------- #
 
-client.run('OTc4MjI5MTUwNDI0OTIwMDc0.GTFsq3.uomKxew7wl-gobOTyd5Y4f1qAS03etcrLaEQyM ')
+client.run('OTc4MjI5MTUwNDI0OTIwMDc0.GTFsq3.uomKxew7wl-gobOTyd5Y4f1qAS03etcrLaEQyM')
