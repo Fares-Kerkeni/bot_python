@@ -10,7 +10,6 @@ from discord_components import DiscordComponents, ComponentsBot, Button, SelectO
 client = commands.Bot(command_prefix="=")
 DiscordComponents(client)
 
-<<<<<<< HEAD
 message_aide = "``` Liste des commandes \n \n Sur tous les channels \n =clear nombre, pour supprimer le nombre de message que vous voulez \n =moderator, pour appeler les modérateurs \n =mathadd chiffre1 chiffre2, pour addition 2 chiffres \n =mathsub chiffre1 chiffre2, pour soustraire 2 chiffres \n =mathdiv chiffre1 chiffre2, pour diviser 2 chiffres \n =mathmult chiffre1 chiffre2, pour multiplier 2 chiffres \n =mathsqrt chiffre, pour obtenir la racine carré d'un chiffre \n =mathrando nombre1 nombre2, pour obtenir un nombre entre les 2 nombres entrés \n \n Channel tictactoe \n =tictactoe @joueur1 @joueur2, pour lancer une partie de tic tac toe \n =place numéro de la case, pour placer sa marque \n \n Channel joke \n =joke, pour avoir une blague/devinette \n =give_blague, pour connaitre la réponse de la blague/devinette \n =answer reponse, pour essayer de trouver la réponse \n =indice 1 ou =indice 2, pour avoir un indice sur la blague/devinette \n \n Channel pendu \n =pendu facile/moyen/difficile pour lancer un pendu \n =try_letter lettre, pour essayer de trouver une lettre \n =try_mot mot, pour essayer de trouver le mot \n =give_pendu, pour connaitre la réponse \n \n Channel plus ou moins \n =more_less minimum maximum, pour lancer une partie de plus ou moins \n =try_more_less nombre, pour tenter de trouver la réponse \n =give_more_less, pour connaitre la réponse \n \n Channel tu preferes \n =tu_preferes, pour lancer un tu préfères \n =je_prefere 1 ou =je_prefere 2, pour choisir la réponse \n =stop_prefere, pour arreter le tu preferes```"
 
 @client.command()
@@ -21,25 +20,6 @@ async def commandes(ctx):
 async def moderator(ctx):
     moderator = discord.utils.get(ctx.guild.roles, id=978559990577115167)
     await ctx.send(f'{moderator.mention}')
-=======
-message_aide = '``` Liste des commandes \n \n Channel tictactoe \n =tictactoe @joueur1 @joueur2, pour lancer une partie de tic tac toe \n =place numéro de la case, pour placer sa marque \n \n Channel joke \n =joke, pour avoir une blague/devinette \n =give_blague, pour connaitre la réponse de la blague/devinette \n =answer reponse, pour essayer de trouver la réponse \n =indice 1 ou =indice 2, pour avoir un indice sur la blague/devinette \n \n Channel pendu \n =pendu facile/moyen/difficile pour lancer un pendu \n =try_letter lettre, pour essayer de trouver une lettre \n =try_mot mot, pour essayer de trouver le mot \n =give_pendu, pour connaitre la réponse \n \n Channel plus ou moins \n =more_less minimum maximum, pour lancer une partie de plus ou moins \n =try_more_less nombre, pour tenter de trouver la réponse \n =give_more_less, pour connaitre la réponse \n \n Channel tu preferes \n =tu_preferes, pour lancer un tu préfères \n =je_prefere 1 ou =je_prefere 2, pour choisir la réponse \n =stop_prefere, pour arreter le tu preferes```'
-
-@client.command()
-async def aide(ctx):
-    await ctx.send(message_aide)
-    # if ctx.channel.id == 978573528297250817:
-    #     await ctx.send("help joke")
-    # elif ctx.channel.id == 980060663462391839:
-    #     await ctx.send("help tictactoe")
-    # elif ctx.channel.id == 980124791652646972:
-    #     await ctx.send("help pendu")
-    # elif ctx.channel.id == 980145249005494293:
-    #      await ctx.send("help tu preferes")
-    # elif ctx.channel.id == 980407531623030954:
-    #      await ctx.send("help plus ou moins")
-    # else :
-    #     await ctx.send("vous pouvez utiliser cette commande que dans le channel joke, pendu, tictactoe, tu-preferes et plus-ou-moins")
->>>>>>> d2f3cfdf68e931941f8f221367f838f111a8d82c
 
 @client.command()
 async def clear(ctx, amount=5):
