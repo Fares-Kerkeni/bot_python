@@ -3,27 +3,23 @@ import discord
 from discord.ext import commands
 from random import randint
 import random
+import math
 from discord_components import DiscordComponents, ComponentsBot, Button, SelectOption, Select
 
 
 client = commands.Bot(command_prefix="=")
 DiscordComponents(client)
 
+message_aide = "``` Liste des commandes \n \n Sur tous les channels \n =clear nombre, pour supprimer le nombre de message que vous voulez \n =moderator, pour appeler les modérateurs \n =mathadd chiffre1 chiffre2, pour addition 2 chiffres \n =mathsub chiffre1 chiffre2, pour soustraire 2 chiffres \n =mathdiv chiffre1 chiffre2, pour diviser 2 chiffres \n =mathmult chiffre1 chiffre2, pour multiplier 2 chiffres \n =mathsqrt chiffre, pour obtenir la racine carré d'un chiffre \n =mathrando nombre1 nombre2, pour obtenir un nombre entre les 2 nombres entrés \n \n Channel tictactoe \n =tictactoe @joueur1 @joueur2, pour lancer une partie de tic tac toe \n =place numéro de la case, pour placer sa marque \n \n Channel joke \n =joke, pour avoir une blague/devinette \n =give_blague, pour connaitre la réponse de la blague/devinette \n =answer reponse, pour essayer de trouver la réponse \n =indice 1 ou =indice 2, pour avoir un indice sur la blague/devinette \n \n Channel pendu \n =pendu facile/moyen/difficile pour lancer un pendu \n =try_letter lettre, pour essayer de trouver une lettre \n =try_mot mot, pour essayer de trouver le mot \n =give_pendu, pour connaitre la réponse \n \n Channel plus ou moins \n =more_less minimum maximum, pour lancer une partie de plus ou moins \n =try_more_less nombre, pour tenter de trouver la réponse \n =give_more_less, pour connaitre la réponse \n \n Channel tu preferes \n =tu_preferes, pour lancer un tu préfères \n =je_prefere 1 ou =je_prefere 2, pour choisir la réponse \n =stop_prefere, pour arreter le tu preferes```"
 
 @client.command()
-async def aide(ctx):
-    if ctx.channel.id == 978573528297250817:
-        await ctx.send("help joke")
-    elif ctx.channel.id == 980060663462391839:
-        await ctx.send("help tictactoe")
-    elif ctx.channel.id == 980124791652646972:
-        await ctx.send("help pendu")
-    elif ctx.channel.id == 980145249005494293:
-         await ctx.send("help tu preferes")
-    elif ctx.channel.id == 980407531623030954:
-         await ctx.send("help plus ou moins")
-    else :
-        await ctx.send("vous pouvez utiliser cette commande que dans le channel joke, pendu, tictactoe, tu-preferes et plus-ou-moins")
+async def commandes(ctx):
+    await ctx.send(message_aide)
+
+@client.command()
+async def moderator(ctx):
+    moderator = discord.utils.get(ctx.guild.roles, id=978559990577115167)
+    await ctx.send(f'{moderator.mention}')
 
 @client.command()
 async def clear(ctx, amount=5):
@@ -697,37 +693,151 @@ def number_to_emoji(nombre_a_convertir):
 # ----------------------------------------------- TU PREFERES ----------------------------------------------- #
 
 all_tu_preferes = [
-    ["Manger une limasse","Manger un escargot",[382634426305085440]],
-    ["Manger des crottes de nez","Manger des cires d'oreille",[]],
-    ["Perdres tes mains","Perdres tes pieds",[382634426305085440]],
-    ["Mourir bruler","Mourir noyer",[]]
+    ["manger une limasse","manger un escargot",[],0,0],
+    ["manger des crottes de nez","manger des cires d'oreille",[],0,0],
+    ["perdre tes mains","perdre tes pieds",[],0,0],
+    ["mourir bruler","mourir noyer",[],0,0]
 ]
 
 tu_preferes_aleatoire = ""
+liste_a_faire = []
+tu_preferes_on_off = "off"
 
-# fonction pour connaitre la reponse
+# fonction pour lancer un tu preferes
 @client.command()
 async def tu_preferes(ctx):
-    global tu_preferes_aleatoire
     global all_tu_preferes
+    global user_tu_preferes
+    global liste_a_faire
+    global tu_preferes_on_off
 
-    user = ctx.author.id
+    user_tu_preferes = ctx.author.id
     liste_a_faire = []
-    liste_deja_fait = []
+
     # verifie si l'utilisateur est bien dans le tu preferes
     if ctx.channel.id == 980145249005494293:
-        if tu_preferes_aleatoire != "" :
+        # si il y a deja une partie en cours
+        if tu_preferes_on_off == "on" :
             await ctx.send("Il y a déjà une partie en cours")
         else :
+            # ajoute toutes les questions possibles dans un tableau
             for i in range(len(all_tu_preferes)) :
-                for j in range (len(all_tu_preferes[i][2])) :
-                    if all_tu_preferes[i][2][j] == user :
-                        liste_deja_fait.append(i)
+                liste_a_faire.append(i)
+
+            # supprime les questions du tableau aux quelles l'utilisateur a déjà repondu
+            for i in range(len(all_tu_preferes)) :
+                if user_tu_preferes in all_tu_preferes[i][2] :
+                    liste_a_faire.remove(i)
+            
+            # si l'utilisateur a déjà repondu a toutes les questions
+            if len(liste_a_faire) == 0 :
+                await ctx.send("Vous avez déjà répondu a toutes les questions, d'autres questions seront bientot disponible")
+            # donne une question aleatoire a l'utilisateur
+            else :
+                random.shuffle(liste_a_faire)
+                await ctx.send("Tu préfères")
+                await ctx.send(f"réponse 1 {all_tu_preferes[liste_a_faire[0]][0]}")
+                await ctx.send(f"réponse 2 {all_tu_preferes[liste_a_faire[0]][1]}")
+                tu_preferes_on_off = "on"
 
     # si l'utilisateur est dans le mauvais canal ca le previent
     else :
         await ctx.send("Cette commande marche que dans le channel tu préfères")
 
+# fonction pour repondre
+@client.command()
+async def je_prefere(ctx, reponse = 0):
+    global all_tu_preferes
+    global user_je_preferes
+    global liste_a_faire
+    global tu_preferes_on_off
+
+    user_je_preferes = ctx.author.id
+    # verifie si l'utilisateur est bien dans le tu preferes
+    if ctx.channel.id == 980145249005494293:
+        # si il n'y a pas de partie en cours
+        if tu_preferes_on_off == "off" :
+            await ctx.send("Vous devez lancer un tu préfères avnat de pouvoir utiliser cette commande")
+        else :
+            # si la personne qui a lancé le tu preferes n'est pas celle qui repond
+            if user_tu_preferes != user_je_preferes :
+                await ctx.send("Ce n'est pas vous qui avez lancer ce tu préfères")
+            else : 
+                # si l'utilisateur n'entre pas 1 ou 2
+                if reponse != 1 and reponse != 2 :
+                    await ctx.send("Vous devez choisir une réponse entre 1 et 2")
+                else :
+                    # si c'est la réponse 1
+                    if reponse == 1 :
+                        # donne les stats
+                        await ctx.send(f"Tu préfères {all_tu_preferes[liste_a_faire[0]][0]} comme {all_tu_preferes[liste_a_faire[0]][3]} autres personnes")
+                        await ctx.send(f"{all_tu_preferes[liste_a_faire[0]][4]} personnes ont choisis : {all_tu_preferes[liste_a_faire[0]][1]}")
+                        # ajoute l'utilisateur dans les personnes qui ont voté cette réponse
+                        all_tu_preferes[liste_a_faire[0]][3] = all_tu_preferes[liste_a_faire[0]][3] + 1
+                    # si c'est la réponse 2
+                    else :
+                        # donne les stats
+                        await ctx.send(f"Tu préfères {all_tu_preferes[liste_a_faire[0]][1]} comme {all_tu_preferes[liste_a_faire[0]][4]} autres personnes")
+                        await ctx.send(f"{all_tu_preferes[liste_a_faire[0]][3]} personnes ont choisis : {all_tu_preferes[liste_a_faire[0]][0]}")
+                        # ajoute l'utilisateur dans les personnes qui ont voté cette réponse
+                        all_tu_preferes[liste_a_faire[0]][4] = all_tu_preferes[liste_a_faire[0]][4] + 1
+                    # ajoute l'utilisateur dans le tableau des personnes qui ont déjà répondu a cette question
+                    all_tu_preferes[liste_a_faire[0]][2].append(user_tu_preferes)
+                    tu_preferes_on_off = "off"
+    # si l'utilisateur est dans le mauvais canal ca le previent
+    else :
+        await ctx.send("Cette commande marche que dans le channel tu préfères")
+
+# fonction pour repondre
+@client.command()
+async def stop_prefere(ctx):
+    global tu_preferes_on_off
+
+    # verifie si l'utilisateur est bien dans le tu preferes
+    if ctx.channel.id == 980145249005494293:
+        # si il n'y a pas de partie en cours
+        if tu_preferes_on_off == "off" :
+            await ctx.send("Vous devez lancer un tu préfères avnat de pouvoir utiliser cette commande")
+        else :
+            tu_preferes_on_off = "off"
+    # si l'utilisateur est dans le mauvais canal ca le previent
+    else :
+        await ctx.send("Cette commande marche que dans le channel tu préfères")
+
 # ----------------------------------------------- TU PREFERES ----------------------------------------------- #
+
+# --------------------------------------------------- MATH --------------------------------------------------- #
+
+@client.command()
+async def mathadd(ctx, x: float, y: float):
+    await ctx.send(x + y)
+
+@client.command()
+async def mathsub(ctx, x: float, y: float):
+     await ctx.send(x - y)
+
+@client.command()
+async def mathdiv(ctx, x: float, y: float):
+    await ctx.send(x / y)
+
+@client.command()
+async def mathmult(ctx, x: float, y: float):
+    await ctx.send(x * y)
+
+@client.command()
+async def mathrandom(ctx, x: int, y: int):
+    await ctx.send(random.randint(x, y))
+
+@client.command()
+async def mathracine(ctx, x: float):
+    await ctx.send(math.sqrt(x))
+
+# --------------------------------------------------- MATH --------------------------------------------------- #
+
+# ----------------------------------------------- PUISSANCE 4 ----------------------------------------------- #
+
+puissance_4 = []
+
+# ----------------------------------------------- PUISSANCE 4 ----------------------------------------------- #
 
 client.run('OTc4MjI5MTUwNDI0OTIwMDc0.GTFsq3.uomKxew7wl-gobOTyd5Y4f1qAS03etcrLaEQyM')
