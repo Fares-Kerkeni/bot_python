@@ -181,27 +181,7 @@ async def on_message(message):
 
 
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-client.run("OTgwNTQ5OTY3ODYzMjM4NzE3.Go8yAj.AK-UprLt58Nview4Z9kTKI3yUkJb_Hxn0gygrI")
+# client.run("token à mettre")
 
 
 
