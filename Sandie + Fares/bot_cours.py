@@ -1,3 +1,4 @@
+from re import X
 import discord
 from discord.ext import commands
 
@@ -47,13 +48,54 @@ async def on_message(message):
         return
 
     help_channel = client.get_channel(981844037403287635)
+    # role = client.get_role(978559990577115167)
 
     if message.content == "!hello":
         await message.channel.send('Bonjour :smiley: !')
-    
-    if message.content == "!command":
-        await message.channel.send('aide : appelle le bot cours\!modo : appelle un modérateur\nretour : retourne à la précédente étape\nreset ou stop : arrête la conversation avec le bot cours')
 
+
+
+
+            # version de del sans permission avec les roles
+
+    # if message.content == "!del":    
+    #     await message.channel.purge(limit= 5)
+
+    # if message.content.startswith("!del"):
+    #     number = int(message.content.split()[1])
+    #     testnb = number + 1
+    #     await message.channel.purge(limit= testnb)
+
+
+            # del autoriser seulement au rôle modo
+
+
+    if message.content.startswith("!del"):
+        my_role = message.author.roles
+        nb = len(my_role)
+        i = 0
+        valid_role = 0
+        while i < nb:
+            if my_role[i].id == 978559990577115167:
+                valid_role += 1
+            i += 1
+        if valid_role == 1 :
+            if len(message.content.split()) > 1:
+                number = int(message.content.split()[1])
+            else:
+                number = 5
+            testnb = number + 1
+            await message.channel.purge(limit= testnb)
+        else:
+            await message.channel.send("Tu n'as pas la permission d'utiliser cette commande :confused:")
+
+
+
+    if message.content == "!command" and message.channel == help_channel :
+        await message.channel.send('-> **!hello**\n-> **!command_cours** :\n      commandes pour les cours/tutos\n-> **!del/del nb** :\n      supprimer message (réserver aux modérateurs)')
+
+    if message.content == "!command_cours" and message.channel == help_channel:
+        await message.channel.send('-> **aide** :\n     appelle le bot cours\n-> **retour** :\n     retourne à la précédente étape\n-> **reset/stop** :\n     arrête la conversation avec le bot cours')
 
 
 
@@ -79,6 +121,7 @@ async def on_message(message):
         liste_users.append(0)
         liste_users.append("")
         liste_users.append("")
+        liste_users.append(0)
 
     
     for i in range(len(liste_users)):
@@ -88,17 +131,7 @@ async def on_message(message):
             user_etape = i+2
             user_etat = i+3
             user_phrase = i+4
-
-    if message.content == "!test":    
-        await message.channel.send(liste_users)
-    if message.content == "!coucou":    
-        await message.channel.send(liste_users[user_m])
-
-    if message.content.startswith("!del"):
-        number = int(message.content.split()[1])
-        testnb = number + 1
-        await message.channel.purge(limit= testnb)
-
+            valid_word = i+5
 
 
     # bot :
@@ -154,34 +187,31 @@ async def on_message(message):
     # on choisit le langage du tuto
     if message.channel == help_channel and liste_users[user_etape] == 2:
         j = 0
-        valid = 0
+        liste_users[valid_word] = 0
         while j < len(liste_users[user_etat].liste_child):
             if liste_users[user_etat].liste_child[j].keyword in message.content:
                 liste_users[user_etape] += 1
                 liste_users[user_phrase] = liste_users[user_etat].liste_child[j].phrase
                 await message.channel.send("-> Voilà "+liste_users[user_m]+",\n"+liste_users[user_etat].liste_child[j].phrase)
-                valid += 1
+                liste_users[valid_word] += 1
             j+= 1
-        if valid == 0 :
+        if liste_users[valid_word] == 0 :
             await message.channel.send("-> Désolé "+liste_users[user_m]+",\n je n'ai rien concernant ce que tu recherches. En revanche je peux t'aider en JS, HTML, CSS, SQL et PHP.")
             
-
-
-                # a finir : message d'erreur si on indique un mot qui n'est pas dans notre liste
-
 
 
     if liste_users[user_etape] >= 3:
         liste_users[user_etape] = 0
         liste_users[user_etat] = ""
         liste_users[user_phrase] = ""
-
+        liste_users[valid_word] = 0
         await message.channel.send("A bientot "+liste_users[user_m]+", j'espère avoir pu t'aider, refait appel à moi si besoin :smiley: !") 
 
 
 
 
-# client.run("token à mettre")
+
+client.run("token a mettre")
 
 
 
